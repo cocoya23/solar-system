@@ -24,7 +24,7 @@ GET /api/memory/weather?day=0
 #### Get Weather History
 Obtiene el historico almacenado
 ```BASH
-GET /api/memory/weather?day=0
+GET /api/memory/history
 ```
 
 #### Run Simulation
