@@ -15,10 +15,6 @@ function calculatePlanetPosition(planet, day) {
 function calculateMeta(planet1, planet2, planet3, day){
     let area = getArea(planet1, planet2, planet3)
     let perimeter = getPerimeter(planet1, planet2, planet3)
-    if(perimeter>=maxPeri){
-        maxPeri = perimeter
-        maxDay = day
-    }
     let prevPlanets = calculatePlanets(PLANETS, day - 1)
     let prevPerimeter = getPerimeter(prevPlanets.ferengi, prevPlanets.betasoide, prevPlanets.vulcano)
     let nextPlanets = calculatePlanets(PLANETS, day + 1)
@@ -75,6 +71,7 @@ function isInside(planet1, planet2, planet3) {
 }
 
 function calculatePlanets(planets, day) {
+    planets = JSON.parse(JSON.stringify(planets))
     for(const planet in planets) {
         planets[planet].day = day
         planets[planet].position = calculatePlanetPosition(planets[planet], day)
@@ -86,8 +83,29 @@ function calculateSolarSystem(day){
     let planets = calculatePlanets(PLANETS, day)
     let extras = calculateMeta(planets.ferengi, planets.betasoide, planets.vulcano, day)
     return {
-        planets: Object.assign({}, planets),
+        planets,
         meta: extras
+    }
+}
+
+const PLANETS = {
+    ferengi: {
+        distance: 500,
+        velocity: 1,
+        day: 0,
+        position: {x: 0, y: 0} 
+    },
+    betasoide: {
+        distance: 2000,
+        velocity: 3,
+        day: 0,
+        position: {x: 0, y: 0} 
+    },
+    vulcano: {
+        distance: 1000,
+        velocity: -5,
+        day: 0,
+        position: {x: 0, y: 0} 
     }
 }
 

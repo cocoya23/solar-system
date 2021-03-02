@@ -2,10 +2,7 @@ const {HTTPError} = require('../errors')
 const buildResponseBody = require('./response-body')
 module.exports = function makeExpressCallabck(controller) {
 	return (req, res) => {
-		req.httpRequest.params = req.params
-		req.httpRequest.io = req.io
-		logger.info(JSON.stringify(req.httpRequest.params))
-		controller(req.httpRequest, bugsnag)
+		controller(req.httpRequest)
 			.then(httpResponse => {
 				if (httpResponse.headers) {
 					res.set(httpResponse.headers)
