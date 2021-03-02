@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Solar system</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.js"></script>
+    <script type="text/javascript">
+        let FerengiDistance = 50
+        let FerengiVelocity = 1
+        let FerengiAngle = 0
+        let BetasoideDistance = 200
+        let BetasoideVelocity = 3
+        let BetasoideAngle = 0
+        let VulcanoDistance = 100
+        let VulcanoVelocity = -5
+        let VulcanoAngle = 0
+        let maxPerimeter = 0
+
+        function setup() {
+            createCanvas(500, 500);
+            frameRate(30);
+            stroke(255);
+            strokeWeight(1);
+        }
+
+        function draw() {
+            clear();
+            background(0);
+            fill(255, 100, 0);
+            ellipse(250, 250, 10, 10);
+            fill(100, 0, 255);
+            let ferengiA = map(FerengiAngle, 0, 360, 0, TWO_PI) - HALF_PI
+            let ferengiX = (cos(ferengiA) * FerengiDistance) + 250
+            let ferengiY = (sin(ferengiA) * FerengiDistance) + 250
+            let betasoideA = map(BetasoideAngle, 0, 360, 0, TWO_PI) - HALF_PI
+            let betasoideX = (cos(betasoideA) * BetasoideDistance) + 250
+            let betasoideY = (sin(betasoideA) * BetasoideDistance) + 250
+            let vulcanoA = map(VulcanoAngle, 0, 360, 0, TWO_PI) - HALF_PI
+            let vulcanoX = (cos(vulcanoA) * VulcanoDistance) + 250
+            let vulcanoY = (sin(vulcanoA) * VulcanoDistance) + 250
+            print(FerengiAngle)
+            ellipse(ferengiX, ferengiY, 10, 10);
+            ellipse(betasoideX, betasoideY, 10, 10);
+            ellipse(vulcanoX, vulcanoY, 10, 10);
+            line(ferengiX, ferengiY, betasoideX, betasoideY);
+            line(betasoideX, betasoideY, vulcanoX, vulcanoY);
+            line(vulcanoX, vulcanoY, ferengiX, ferengiY);
+            let lengthA = dist(ferengiX, ferengiY, betasoideX, betasoideY)
+            let lengthB = dist(betasoideX, betasoideY, vulcanoX, vulcanoY)
+            let lengthC = dist(vulcanoX, vulcanoY, ferengiX, ferengiY)
+            let totalPerimeter = lengthA + lengthB + lengthC
+            FerengiAngle += FerengiVelocity;
+            BetasoideAngle += BetasoideVelocity;
+            VulcanoAngle += VulcanoVelocity;
+        }
+    </script>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            background-color: black;
+        }
+        canvas {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+
+    </main>
+</body>
+
+</html>

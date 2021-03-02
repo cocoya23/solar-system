@@ -1,4 +1,4 @@
-let planets = {
+const PLANETS = {
     ferengi: {
         distance: 500,
         velocity: 1,
@@ -18,7 +18,8 @@ let planets = {
         position: {x: 0, y: 0} 
     }
 }
-
+let maxPeri = 0
+let maxDay = 0
 function map(value, low1, high1, low2, high2) {
     return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
@@ -34,14 +35,20 @@ function calculatePlanetPosition(planet, day) {
 }
 
 function calculateMeta(planet1, planet2, planet3, day){
-    let sun = {
-        position: {x: 0, y: 0}
-    }
-    let perimeter = getPerimeter(planet1, planet2, planet3)
     let area = getArea(planet1, planet2, planet3)
+    let perimeter = getPerimeter(planet1, planet2, planet3)
+    if(perimeter>=maxPeri){
+        maxPeri = perimeter
+        maxDay = day
+    }
+    let prevPlanets = calculatePlanets(PLANETS, day - 1)
+    let prevPerimeter = getPerimeter(prevPlanets.ferengi, prevPlanets.betasoide, prevPlanets.vulcano)
+    let nextPlanets = calculatePlanets(PLANETS, day + 1)
+    let nextPerimeter = getPerimeter(nextPlanets.ferengi, nextPlanets.betasoide, nextPlanets.vulcano)
     let isSunInside = isInside(planet1, planet2, planet3)
     let arePlanetsCollinear = areCollinear(planet1, planet2, planet3)
-    return {area, perimeter, isSunInside, arePlanetsCollinear}
+    let isMaxPerimeter = (perimeter >= prevPerimeter && perimeter >= nextPerimeter)
+    return {area, perimeter, isSunInside, arePlanetsCollinear, isMaxPerimeter}
 }
 
 function getArea(planet1, planet2, planet3) {
@@ -89,23 +96,30 @@ function isInside(planet1, planet2, planet3) {
     return subArea == Math.floor(totalArea);
 }
 
-function calculateSolarSystem(day){
-    console.log(day)
+function calculatePlanets(planets, day) {
     for(const planet in planets) {
         planets[planet].day = day
         planets[planet].position = calculatePlanetPosition(planets[planet], day)
-    };
+    }
+    return planets
+}
+
+function calculateSolarSystem(day){
+    let planets = calculatePlanets(PLANETS, day)
     let extras = calculateMeta(planets.ferengi, planets.betasoide, planets.vulcano, day)
-    console.log(extras)
     return {
         planets: Object.assign({}, planets),
         meta: extras
     }
 }
 
-function simulate(){
-    for (let day = 80; day <= 90; day++) {
+function simulate(days){
+    for (let day = 0; day <= days; day++) {
         calculateSolarSystem(day)
     }
 }
-simulate()
+let init = Date.now()
+simulate(36500)
+let end = Date.now()
+
+console.log(end-init)
